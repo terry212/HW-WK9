@@ -4,39 +4,68 @@ const util = require("util");
 const axios = require("axios");
 const inquirer = require("inquirer");
 const dotenv = require("dotenv");
-const githubUsername = require("./utils/api");
+const api = require("./utils/api");
 const markdown = require("./utils/generateMarkdown");
 
 const questions = [
-    "What is your github username?", // 0
-    "What repo needs a README generated?" // 1
-    // "What is the title of the project?",
-    // "What is the best way to describe the project?",
-    // "What code was required for this project?",
-    // "What are the usages of this project?",
-    // "What is the name of your company or team that will be licensing the project?",
-    // "Was there contribution made by someone other than yourself?",
-    // "How did you test this project? Get into more details on code and technologies used.",
-    // "Do you have any FAQ's?"
+    {
+        type: "input",
+        name: "username",
+        message: "What is your github username?"
+    },
+    {
+        type: "input",
+        name: "title",
+        message: "What is the title of the project?"
+    },
+    {
+        type: "input",
+        name: "description",
+        message: "What is the best way to describe the project?"
+    },
+    {
+        type: "input",
+        name: "installation",
+        message: "What code was required for this project?"
+    },
+    {
+        type: "input",
+        name: "usage",
+        message: "What are the usages of this project?"
+    },
+    {
+        type: "input",
+        name: "author",
+        message: "Who is the author that will be licensing the project?"
+    },
+    {
+        type: "input",
+        name: "contributing",
+        message: "Was there contribution made by someone other than yourself?"
+    },
+    {
+        type: "input",
+        name: "tests",
+        message: "How did you test this project? Get into more details on code and technologies used."
+    },
+    // {
+    //     type: "confirm",
+    //     name: "FAQ",
+    //     message: "Do you have any FAQ's?"
+    // }
+    // "What repo needs a README generated?"
 ];
-
-function promptUser() {
-    return inquirer.prompt([
-        {
-            type: "input",
-            name: "username",
-            message: `${questions[0]}`
-        }
-    ]);
-}
 
 function writeToFile(fileName, data) {
 }
 
 function init() {
-    promptUser()
+    return inquirer.prompt(questions)
         .then(function (answers) {
-            const username = githubUsername.getUser(answers.username);
+            console.log(answers.username);
+            const username = answers.username;
+            // const testApi = api.getUser(answers.username);
+            console.log(api.getUser(username));
         })
         .then(function () {
             console.log("Successfully grabbed username");
