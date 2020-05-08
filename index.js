@@ -1,14 +1,9 @@
 // All required files requested
 const fs = require("fs");
-const util = require("util");
 const axios = require("axios");
 const inquirer = require("inquirer");
-const dotenv = require("dotenv");
 const api = require("./utils/api");
 const markdown = require("./utils/generateMarkdown");
-
-const readFileAsync = util.promisify(fs.readFile);
-const writeFileAsync = util.promisify(fs.writeFile);
 
 const questions = [
     {
@@ -60,21 +55,21 @@ const questions = [
 ];
 
 function writeToFile(fileName, data) {
+    fs.writeFile(fileName, data, function (error) {
+        if (error) throw error;
+    });
 }
 
 function init() {
     return inquirer.prompt(questions)
         .then(function (answers) {
-            // console.log(answers.username);
-            // const username = answers.username;
-            // const testApi = api.getUser(answers.username);
-            // console.log(api.getUser(username));
             markdown(answers);
-            api.getUser(answers); 
-            console.log(api);
+            const userMarkdown = markdown(answers);
+            api.getUser(answers);
+            writeToFile("Test1.md", userMarkdown);
         })
         .then(function () {
-            console.log("Successfully grabbed username");
+            console.log("Success!");
         })
         .catch(function (err) {
             console.log(err);
