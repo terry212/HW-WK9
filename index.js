@@ -7,6 +7,9 @@ const dotenv = require("dotenv");
 const api = require("./utils/api");
 const markdown = require("./utils/generateMarkdown");
 
+const readFileAsync = util.promisify(fs.readFile);
+const writeFileAsync = util.promisify(fs.writeFile);
+
 const questions = [
     {
         type: "input",
@@ -47,7 +50,7 @@ const questions = [
         type: "input",
         name: "tests",
         message: "How did you test this project? Get into more details on code and technologies used."
-    },
+    }
     // {
     //     type: "confirm",
     //     name: "FAQ",
@@ -62,10 +65,13 @@ function writeToFile(fileName, data) {
 function init() {
     return inquirer.prompt(questions)
         .then(function (answers) {
-            console.log(answers.username);
-            const username = answers.username;
+            // console.log(answers.username);
+            // const username = answers.username;
             // const testApi = api.getUser(answers.username);
-            console.log(api.getUser(username));
+            // console.log(api.getUser(username));
+            markdown(answers);
+            api.getUser(answers); 
+            console.log(api);
         })
         .then(function () {
             console.log("Successfully grabbed username");
