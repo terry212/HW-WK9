@@ -1,6 +1,5 @@
 // All required files requested
 const fs = require("fs");
-const axios = require("axios");
 const inquirer = require("inquirer");
 const api = require("./utils/api");
 const markdown = require("./utils/generateMarkdown");
@@ -45,6 +44,11 @@ const questions = [
         type: "input",
         name: "tests",
         message: "How did you test this project? Get into more details on code and technologies used."
+    },
+    {
+        type: "input",
+        name: "fileName",
+        message: "What name would you like to give your README file?"
     }
     // {
     //     type: "confirm",
@@ -65,10 +69,8 @@ function init() {
         .then(function (answers) {
             markdown(answers);
             const userMarkdown = markdown(answers);
-            api.getUser(answers);
-            writeToFile("Test1.md", userMarkdown);
-        })
-        .then(function () {
+            api.getUser(answers.username);
+            writeToFile(`${answers.fileName}.md`, userMarkdown);
             console.log("Success!");
         })
         .catch(function (err) {
